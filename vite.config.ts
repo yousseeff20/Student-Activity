@@ -4,7 +4,10 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
+
 export default defineConfig(({ mode }) => ({
+  base: "/", // مهم علشان الموقع يشتغل على الدومين
+
   server: {
     host: "::",
     port: 5173,
@@ -13,14 +16,18 @@ export default defineConfig(({ mode }) => ({
     },
     proxy: {
       "/api": {
-        target: "https://samanage-api-ekdbfue6gqh7dhd8.westeurope-01.azurewebsites.net/", // عدل هذا البورت إذا كان الباك إند المحلي يعمل على بورت مختلف
+        target: "https://samanage-api-ekdbfue6gqh7dhd8.westeurope-01.azurewebsites.net",
         changeOrigin: true,
         secure: false,
-        
       },
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
