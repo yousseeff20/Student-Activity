@@ -1,0 +1,29 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { componentTagger } from "lovable-tagger";
+
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => ({
+  server: {
+    host: "::",
+    port: 5173,
+    hmr: {
+      overlay: false,
+    },
+    proxy: {
+      "/api": {
+        target: "https://samanage-api-ekdbfue6gqh7dhd8.westeurope-01.azurewebsites.net/", // عدل هذا البورت إذا كان الباك إند المحلي يعمل على بورت مختلف
+        changeOrigin: true,
+        secure: false,
+        
+      },
+    },
+  },
+  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+}));
